@@ -11,11 +11,11 @@ public class GameManager : MonoBehaviour
     private bool _isGameOver;
 
     private bool _escGame;
-    
+
     private void Update()
     {
-          
-        if (Input.GetKeyDown(KeyCode.R) && _isGameOver == true )
+
+        if (Input.GetKeyDown(KeyCode.R) && _isGameOver == true)
         {
             SceneManager.LoadScene(1);
         }
@@ -35,5 +35,5 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-   
+
 }

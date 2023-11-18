@@ -5,7 +5,7 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
 
-private AudioSource _explosionSX;
+    private AudioSource _explosionSX;
 
     // Start is called before the first frame update
     void Start()

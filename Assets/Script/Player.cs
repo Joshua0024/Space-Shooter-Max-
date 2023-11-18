@@ -8,18 +8,18 @@ public class Player : MonoBehaviour
     // data type (int, float, bool, string)
     // every variable has a name
     //optional value assigned
-    
+
     [SerializeField]
     private float _speed = 3.5f;
     private float _speedMultiplier = 2;
-     
+
     public float horizontalInput;
 
     public float verticalInput;
 
     [SerializeField]
     private GameObject _laserPrefab;
-   
+
 
 
     public Vector3 laserOffset = new Vector3(0, 0.8f, 0);
@@ -34,44 +34,44 @@ public class Player : MonoBehaviour
 
     private SpawnManager _spawnManager;
 
-    
+
     [SerializeField]
-     private GameObject _tripleshotPrefab;
+    private GameObject _tripleshotPrefab;
 
-     //variable for isTripleShotActive
+    //variable for isTripleShotActive
 
-     [SerializeField]
-     private bool _istripleshotActive = false; 
-     private bool _isspeedboostActive = false; 
-     private bool _isshieldActive = false; 
+    [SerializeField]
+    private bool _istripleshotActive = false;
+    private bool _isspeedboostActive = false;
+    private bool _isshieldActive = false;
 
-     //varible reference to the shield visualizer 
+    //varible reference to the shield visualizer 
 
-     [SerializeField]
-     private GameObject _shield;
-     
-     [SerializeField]
-     private GameObject _rightDamage;
-     [SerializeField]
-     private GameObject _leftDamage;
+    [SerializeField]
+    private GameObject _shield;
 
-     [SerializeField]
-     private int _score;
-     
-     private UIManager _uiManager;
+    [SerializeField]
+    private GameObject _rightDamage;
+    [SerializeField]
+    private GameObject _leftDamage;
 
-     private AudioSource _laserfireSX;
+    [SerializeField]
+    private int _score;
 
+    private UIManager _uiManager;
 
-     //varible to store the audio clip 
-  
+    private AudioSource _laserfireSX;
 
 
-    
-    
-     
+    //varible to store the audio clip 
 
-    
+
+
+
+
+
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -79,95 +79,95 @@ public class Player : MonoBehaviour
         //take the current position = new position (0 ,0 ,0)
         transform.position = new Vector3(0, 0, 0);
 
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>(); 
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-    
+
         if (_spawnManager == null)
         {
             Debug.LogError("The Spawn Manager is NULL.");
         }
-        
+
     }
 
     // Update is called once per frame
     void Update()
-    {                
-          CalculatedMovement();
+    {
+        CalculatedMovement();
 
-          //if i hit the space key
-          //spawn gameObject
+        //if i hit the space key
+        //spawn gameObject
 
-          if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire )
-          {
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        {
             FireLaser();
-          }
-      }
-         
+        }
+    }
 
 
-      void CalculatedMovement()
+
+    void CalculatedMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
 
         float verticalInput = Input.GetAxis("Vertical");
-    
+
         // new Vector3(-3.5, 0, 0) *-1 *0 *3.5 * real time 
         //if speedboostactive is false 
-      transform.Translate(Vector3.right *horizontalInput *_speed *Time.deltaTime); 
-      
-   
-      //else speed boost multiplier
+        transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
 
-           transform.Translate(Vector3.up *verticalInput *_speed *Time.deltaTime);
 
-       //if player position on the y is greater than 0
-       //y postion = 0
-       //else if position on the y is less than -3.8f
-       //y pos = -3.8f
+        //else speed boost multiplier
 
-      if (transform.position.y >= 0)
-      {
-          transform.position = new Vector3(transform.position.x, 0, 0);
-      }
-      else if (transform.position.y <= -3.8f)
-      {
-            transform.position = new Vector3(transform.position.x, -3.8f, 0 );
-      }
-      
-      //if player on the x > 11
-      // x pos = -11
-      // else if if player on the x is less than -11
-      // x pos = 11
-      
-      if (transform.position.x >= 11.3f)
-      {
-          transform.position = new Vector3(-11.3f, transform.position.y, 0);
-      }
-      else if (transform.position.x <= -11.3f)
-      {
-            transform.position = new Vector3 (11.3f, transform.position.y, 0 );
-      }
+        transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+
+        //if player position on the y is greater than 0
+        //y postion = 0
+        //else if position on the y is less than -3.8f
+        //y pos = -3.8f
+
+        if (transform.position.y >= 0)
+        {
+            transform.position = new Vector3(transform.position.x, 0, 0);
+        }
+        else if (transform.position.y <= -3.8f)
+        {
+            transform.position = new Vector3(transform.position.x, -3.8f, 0);
+        }
+
+        //if player on the x > 11
+        // x pos = -11
+        // else if if player on the x is less than -11
+        // x pos = 11
+
+        if (transform.position.x >= 11.3f)
+        {
+            transform.position = new Vector3(-11.3f, transform.position.y, 0);
+        }
+        else if (transform.position.x <= -11.3f)
+        {
+            transform.position = new Vector3(11.3f, transform.position.y, 0);
+        }
     }
-    
+
     void FireLaser()
     {
-         _canFire = Time.time + _fireRate;   
-        
-         //if space key press, 
-         //if tripleshotActive is true
-            // fire 3 laser (triple shot prefab)
-         
-         //else fire 1 laser            
+        _canFire = Time.time + _fireRate;
 
-         //instantiate 3 lasers (triple shot prefab)
+        //if space key press, 
+        //if tripleshotActive is true
+        // fire 3 laser (triple shot prefab)
 
-          if (_istripleshotActive == true)
+        //else fire 1 laser            
+
+        //instantiate 3 lasers (triple shot prefab)
+
+        if (_istripleshotActive == true)
         {
-          Instantiate(_tripleshotPrefab, transform.position, Quaternion.identity);
+            Instantiate(_tripleshotPrefab, transform.position, Quaternion.identity);
         }
         else
         {
-          Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
 
         //play the laser audio clip 
@@ -178,17 +178,17 @@ public class Player : MonoBehaviour
     public void Damage()
     {
 
-    //if shield is active
-    //do nothing....
-    //deactivate shields 
-    //return; 
-   
-    if (_isshieldActive == true)
-    {
-        _isshieldActive = false;
-        _shield.SetActive(false);
-        return;
-    }
+        //if shield is active
+        //do nothing....
+        //deactivate shields 
+        //return; 
+
+        if (_isshieldActive == true)
+        {
+            _isshieldActive = false;
+            _shield.SetActive(false);
+            return;
+        }
 
         _lives -= 1;
 
@@ -201,9 +201,9 @@ public class Player : MonoBehaviour
         {
             _rightDamage.SetActive(true);
         }
-        else if(_lives == 1)
+        else if (_lives == 1)
         {
-            _leftDamage.SetActive(true); 
+            _leftDamage.SetActive(true);
         }
 
 
@@ -214,9 +214,9 @@ public class Player : MonoBehaviour
 
         if (_lives < 1)
         {
-            
+
             _spawnManager.OnPlayerDeath();
-            
+
             Destroy(this.gameObject);
         }
     }
@@ -227,7 +227,7 @@ public class Player : MonoBehaviour
         //start the power down coroutine for triple shot
 
         _istripleshotActive = true;
-     
+
         StartCoroutine(TripleShotPowerDownRoutine());
     }
 
@@ -237,17 +237,17 @@ public class Player : MonoBehaviour
 
     IEnumerator TripleShotPowerDownRoutine()
     {
-       
+
         yield return new WaitForSeconds(5.0f);
-        _istripleshotActive = false; 
-       
+        _istripleshotActive = false;
+
     }
 
     public void speedboostActive()
     {
         _isspeedboostActive = true;
         _speed *= _speedMultiplier;
-     
+
         StartCoroutine(SpeedBoostCooldownRoutine());
 
     }
@@ -264,7 +264,7 @@ public class Player : MonoBehaviour
     {
         _isshieldActive = true;
         _shield.SetActive(true);
-        
+
 
         //enable the visualizer
     }
@@ -277,9 +277,7 @@ public class Player : MonoBehaviour
     {
         _score += points;
         _uiManager.UpdateScore(_score);
-   
+
     }
 
-  }
-
-  
+}

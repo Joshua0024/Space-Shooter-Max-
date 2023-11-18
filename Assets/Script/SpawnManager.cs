@@ -5,21 +5,21 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
 
-        private IEnumerator coroutine;
+    private IEnumerator coroutine;
 
-        [SerializeField]
-        private GameObject _enemyPrefab;
-        
-        [SerializeField]
-        private GameObject _enemyContainer;
+    [SerializeField]
+    private GameObject _enemyPrefab;
 
-        private bool _stopSpawning = false;
+    [SerializeField]
+    private GameObject _enemyContainer;
 
-        [SerializeField]
-        private GameObject[] powerups;
+    private bool _stopSpawning = false;
+
+    [SerializeField]
+    private GameObject[] powerups;
 
     // Start is called before the first frame update
-  
+
 
     public void StartSpawning()
     {
@@ -31,7 +31,7 @@ public class SpawnManager : MonoBehaviour
     void Update()
     {
 
-        
+
     }
 
     //spawn game objects every 5 seconds 
@@ -41,26 +41,26 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnRoutine()
     {
         //while loop (infinite loop)
-            //Instantiate enemy prefab 
-            //Yield wait for 5 seconds 
+        //Instantiate enemy prefab 
+        //Yield wait for 5 seconds 
 
-      Vector3 spawnPos = Vector3.zero;  
+        Vector3 spawnPos = Vector3.zero;
 
-      yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(3.0f);
 
-      while(_stopSpawning == false)  
-      {
+        while (_stopSpawning == false)
+        {
             spawnPos.x = Random.Range(-8f, 8f);
             spawnPos.y = 7f;
-      
+
             GameObject newEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
-            
+
             newEnemy.transform.parent = _enemyContainer.transform;
-            
+
             yield return new WaitForSeconds(5.0f);
 
-      }
-        
+        }
+
 
 
     }
@@ -72,14 +72,14 @@ public class SpawnManager : MonoBehaviour
 
         Vector3 spawnPos = Vector3.zero;
 
-        while(_stopSpawning == false)
+        while (_stopSpawning == false)
         {
 
             Vector3 postToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            int  randomPowerUp = Random.Range(0, 3);
+            int randomPowerUp = Random.Range(0, 3);
             Instantiate(powerups[randomPowerUp], postToSpawn, Quaternion.identity);
             yield return new WaitForSeconds(Random.Range(3, 8));
-   
+
         }
     }
 
