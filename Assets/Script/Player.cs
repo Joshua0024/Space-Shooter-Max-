@@ -60,7 +60,12 @@ public class Player : MonoBehaviour
 
     private UIManager _uiManager;
 
-    private AudioSource _laserfireSX;
+    [SerializeField]
+    private float _thrusterSpeed = 4.5f; 
+
+    [SerializeField]
+    public GameObject _thruster;  
+ 
 
 
     //varible to store the audio clip 
@@ -101,6 +106,18 @@ public class Player : MonoBehaviour
         {
             FireLaser();
         }
+
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            _speed = _speed += _thrusterSpeed;
+            _thruster.SetActive(true);
+        }
+        else if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            _speed = _speed -= _thrusterSpeed;
+            _thruster.SetActive(false); 
+        }
+
     }
 
 
@@ -171,7 +188,7 @@ public class Player : MonoBehaviour
         }
 
         //play the laser audio clip 
-        _laserfireSX.GetComponent<AudioSource>().Play();
+        
     }
 
 

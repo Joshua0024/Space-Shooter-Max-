@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         //assign text component to the handle
-        _scoreText.text = "Score: " + 0;
+        _scoreText.text = "Score:" + 0;
         _gameoverActive.gameObject.SetActive(false);
         _resetText.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();

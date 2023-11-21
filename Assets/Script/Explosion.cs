@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-
+    [SerializeField]
     private AudioSource _explosionSX;
 
     // Start is called before the first frame update
@@ -16,6 +16,6 @@ public class Explosion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _explosionSX.GetComponent<AudioSource>().Play();
+      
     }
 }
