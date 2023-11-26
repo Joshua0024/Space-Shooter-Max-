@@ -64,8 +64,14 @@ public class Player : MonoBehaviour
     private float _thrusterSpeed = 4.5f; 
 
     [SerializeField]
-    public GameObject _thruster;  
+    public GameObject _thruster;
+
+    [SerializeField]
+    private SpriteRenderer _shieldSpriteRenderer;
+
+    private int _shieldStrength = 3; 
  
+   
 
 
     //varible to store the audio clip 
@@ -86,6 +92,7 @@ public class Player : MonoBehaviour
 
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _shieldSpriteRenderer = this.transform.Find("Shields").GetComponent<SpriteRenderer>();
 
         if (_spawnManager == null)
         {
@@ -194,7 +201,27 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_isshieldActive == true && _shieldStrength >= 1)
+        {
+            _shieldStrength--;
 
+            switch(_shieldStrength)
+            {
+                case 0:
+                    _isshieldActive = false;
+                    _shield.SetActive(false);
+                    break;
+                case 1:
+                    _shieldSpriteRenderer.color = Color.red;
+                    break;
+                case 2:
+                    _shieldSpriteRenderer.color = Color.magenta;
+                    break;
+
+            }
+
+            return; 
+        }
         //if shield is active
         //do nothing....
         //deactivate shields 
@@ -236,6 +263,7 @@ public class Player : MonoBehaviour
 
             Destroy(this.gameObject);
         }
+
     }
 
     public void tripleshotActive()

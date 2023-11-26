@@ -840,6 +840,7 @@ MonoBehaviour:
   _score: 0
   _thrusterSpeed: 4.5
   _thruster: {fileID: 551243950}
+  _shieldSpriteRenderer: {fileID: 1929257561}
 --- !u!212 &564941291
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1978,7 +1979,7 @@ GameObject:
   - component: {fileID: 1929257562}
   - component: {fileID: 1929257564}
   m_Layer: 0
-  m_Name: Shields_00000
+  m_Name: Shields
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
