@@ -24,6 +24,9 @@ public class UIManager : MonoBehaviour
 
     private GameManager _gameManager;
 
+    [SerializeField]
+    private Text _ammoText;
+
 
 
     // Start is called before the first frame update
@@ -33,21 +36,28 @@ public class UIManager : MonoBehaviour
         _scoreText.text = "Score:" + 0;
         _gameoverActive.gameObject.SetActive(false);
         _resetText.gameObject.SetActive(false);
+        _ammoText.text = 15.ToString();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
     }
 
+    public void UpdateAmmo(int playerAmmo)
+    {
+        _ammoText.text = "Ammo:" + playerAmmo.ToString();
+
+    }
     // Update is called once per frame
 
     public void UpdateScore(int playerScore)
     {
-        _scoreText.text = "Score: " + playerScore.ToString();
+        _scoreText.text = "Score:" + playerScore.ToString();
     }
 
     public void UpdateLives(int currentLives)
     {
         //display img Sprite
         //give it new one based on the currentLives index
-        _LivesImg.sprite = _liveSprites[currentLives];
+        Sprite sprite = _liveSprites[currentLives];
+        _LivesImg.sprite = sprite;
 
         if (currentLives == 0)
         {

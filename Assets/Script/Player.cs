@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private float _fireRate = 0.5f;
+    private float _rateoffireMultiplier = -200;
 
     private float _canFire = -1f;
 
@@ -44,6 +45,8 @@ public class Player : MonoBehaviour
     private bool _istripleshotActive = false;
     private bool _isspeedboostActive = false;
     private bool _isshieldActive = false;
+    private bool _isreloadActive = false;
+    private bool _isheavyfireActive = false;
 
     //varible reference to the shield visualizer 
 
@@ -69,9 +72,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private SpriteRenderer _shieldSpriteRenderer;
 
-    private int _shieldStrength = 3; 
- 
-   
+    private int _shieldStrength = 3;
+
+    [SerializeField]
+    public int _ammoCount = 15;
+    [SerializeField]
+    public int _maxAmmo;
+
+    [SerializeField]
+    AudioClip _emptyclipSound;
+
 
 
     //varible to store the audio clip 
@@ -87,6 +97,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _maxAmmo = _ammoCount;
+
         //take the current position = new position (0 ,0 ,0)
         transform.position = new Vector3(0, 0, 0);
 
@@ -104,17 +116,32 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CalculatedMovement();
+            CalculatedMovement();
 
         //if i hit the space key
         //spawn gameObject
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
+            if(_ammoCount == 0)
+            {
+                AudioSource.PlayClipAtPoint(_emptyclipSound, transform.position);
+                return; 
+            }
             FireLaser();
         }
 
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        if (_isheavyfireActive && Input.GetKey(KeyCode.Space))
+        {
+            FireLaser();
+        }
+       
+      
+
+
+
+
+            if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             _speed = _speed += _thrusterSpeed;
             _thruster.SetActive(true);
@@ -175,6 +202,8 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
+        AmmoCounter(-1);
+
         _canFire = Time.time + _fireRate;
 
         //if space key press, 
@@ -194,8 +223,10 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
 
+       
+
         //play the laser audio clip 
-        
+
     }
 
 
@@ -222,6 +253,22 @@ public class Player : MonoBehaviour
 
             return; 
         }
+
+        
+        _uiManager.UpdateLives(_lives);
+
+        switch (_lives)
+        {
+            case 2:
+                _rightDamage.gameObject.SetActive(true);
+                break;
+            case 1:
+                _leftDamage.gameObject.SetActive(true);
+                break;
+            default:
+                break;
+        }
+
         //if shield is active
         //do nothing....
         //deactivate shields 
@@ -288,6 +335,13 @@ public class Player : MonoBehaviour
 
     }
 
+    public void reloadActive()
+    {
+        _isreloadActive = true;
+        _ammoCount = _maxAmmo;
+        _uiManager.UpdateAmmo(_ammoCount);
+    }
+
     public void speedboostActive()
     {
         _isspeedboostActive = true;
@@ -309,6 +363,8 @@ public class Player : MonoBehaviour
     {
         _isshieldActive = true;
         _shield.SetActive(true);
+        _shieldStrength = 3;
+        _shieldSpriteRenderer.color = Color.green;
 
 
         //enable the visualizer
@@ -325,4 +381,49 @@ public class Player : MonoBehaviour
 
     }
 
+    public void AmmoCounter(int bullets)
+    {
+        _ammoCount += bullets;
+        _uiManager.UpdateAmmo(_ammoCount);
+    }
+
+    public void AddingHealth()
+    {
+        if(_lives < 3)
+        {
+            _lives++;
+            _uiManager.UpdateLives(_lives);
+
+            if (_lives == 2)
+            {
+                _rightDamage.SetActive(false);
+            }
+            else if (_lives == 3)
+            {
+                _leftDamage.SetActive(false);
+            }
+        }
+    }
+
+    public void HeavyFire()
+    {
+        _isheavyfireActive = true;
+        _fireRate *= _rateoffireMultiplier;
+
+        StartCoroutine(FireRatedownRoutine());
+    }
+
+    IEnumerator FireRatedownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isheavyfireActive = false;
+        _fireRate /= _rateoffireMultiplier;
+
+        _isheavyfireActive = false;
+        _ammoCount = _maxAmmo; 
+
+     
+    }
+
+    
 }

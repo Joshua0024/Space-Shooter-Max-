@@ -58,6 +58,7 @@ public class Powerup : MonoBehaviour
             //assign the handle to the compnent
 
             Player player = other.transform.GetComponent<Player>();
+
             if (player != null)
             {
 
@@ -75,6 +76,21 @@ public class Powerup : MonoBehaviour
                     case 2:
                         player.shieldsActive();
                         _player.AddScore(3);
+                        break;
+                    case 3:
+                        player.reloadActive();
+                        player.AddScore(2);
+                        Debug.Log("Ammo Colleted");
+                        break;
+                    case 4:
+                        player.AddingHealth();
+                        player.AddScore(4);
+                        Debug.Log("Adding Health");
+                        break;
+                    case 5:
+                        player.HeavyFire();
+                        player.AddScore(6);
+                        Debug.Log("Heavy Fire Actived");
                         break;
                     default:
                         Debug.Log("Default Value");

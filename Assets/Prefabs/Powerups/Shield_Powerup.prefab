@@ -165,4 +165,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _powerupSpeed: 3
   powerupID: 2
-  _powerupSX: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  _powerupSX: {fileID: 8300000, guid: a65a897f15c3ae741a387bed88f15177, type: 3}

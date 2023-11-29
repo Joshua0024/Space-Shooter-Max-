@@ -387,7 +387,6 @@ GameObject:
   - component: {fileID: 214509932}
   - component: {fileID: 214509934}
   - component: {fileID: 214509933}
-  - component: {fileID: 214509935}
   m_Layer: 5
   m_Name: 'Game_Over_Text '
   m_TagString: Untagged
@@ -455,23 +454,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 214509931}
   m_CullTransparentMesh: 0
---- !u!114 &214509935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214509931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46441932b12bf3c428f477d14e6afbce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _scoreText: {fileID: 0}
-  _LivesImg: {fileID: 0}
-  _liveSprites: []
-  _gameoverActive: {fileID: 0}
-  _resetText: {fileID: 0}
 --- !u!1 &357706369
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,6 +823,9 @@ MonoBehaviour:
   _thrusterSpeed: 4.5
   _thruster: {fileID: 551243950}
   _shieldSpriteRenderer: {fileID: 1929257561}
+  _ammoCount: 15
+  _maxAmmo: 0
+  _emptyclipSound: {fileID: 8300000, guid: ed86ddcc05407ce4a98e0e7110960993, type: 3}
 --- !u!212 &564941291
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1115,8 +1100,9 @@ MonoBehaviour:
   - {fileID: 7479098330935218182, guid: 70425b8cd5101284ea46426f750573f4, type: 3}
   - {fileID: 6027686498835570821, guid: 14ba689192c804d49811df0837792920, type: 3}
   - {fileID: 5166621035107889722, guid: dfafc3dbb8ff2b34ca54d9a79d474beb, type: 3}
-  - {fileID: 8259120408263252970, guid: be93761e2f373e445bdd8da175f4acaa, type: 3}
-  - {fileID: 4935869699931895921, guid: eeccd190721d88b46a0210f4d41e06ba, type: 3}
+  - {fileID: 3064832299484464992, guid: ada272517d0cbc94c93268b4393b057c, type: 3}
+  - {fileID: 8315654218166890053, guid: 4fcafc370c77c7d4d931055ab0609795, type: 3}
+  - {fileID: 6694293730123939373, guid: 9094cf6de04b7354aa24a8b316944ea4, type: 3}
 --- !u!4 &760499022
 Transform:
   m_ObjectHideFlags: 0
@@ -1517,6 +1503,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9fe6f40efddf0b64fb68a3382b14a4db, type: 3}
   _gameoverActive: {fileID: 214509933}
   _resetText: {fileID: 1019412772}
+  _ammoText: {fileID: 648810769}
 --- !u!114 &1463409321
 MonoBehaviour:
   m_ObjectHideFlags: 0
