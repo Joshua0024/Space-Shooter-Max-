@@ -27,6 +27,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _ammoText;
 
+    [SerializeField]
+    private Animator _thrusterScale;
+
+   
+
 
 
     // Start is called before the first frame update
@@ -38,7 +43,10 @@ public class UIManager : MonoBehaviour
         _resetText.gameObject.SetActive(false);
         _ammoText.text = 15.ToString();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+      
     }
+
+ 
 
     public void UpdateAmmo(int playerAmmo)
     {
@@ -66,7 +74,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-        void GameOver()
+    public void UpdateAnimation()
+    {
+
+    
+        
+            _thrusterScale.SetTrigger("Odometer_Animation");
+
+            Debug.Log("UpArrow Key was pressed");
+        
+
+    }
+
+    void GameOver()
         {
             _gameoverActive.gameObject.SetActive(true);
             StartCoroutine(GameOverBlinkRoutine());
@@ -84,5 +104,7 @@ public class UIManager : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
             }
         }
+
+    
 
 }

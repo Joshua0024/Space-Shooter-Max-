@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
 
     private float _canFire = -1f;
 
+    
+
     [SerializeField]
     private int _lives = 3;
 
@@ -47,6 +49,7 @@ public class Player : MonoBehaviour
     private bool _isshieldActive = false;
     private bool _isreloadActive = false;
     private bool _isheavyfireActive = false;
+    private bool _isthrusterodometerActive = false;
 
     //varible reference to the shield visualizer 
 
@@ -82,6 +85,22 @@ public class Player : MonoBehaviour
     [SerializeField]
     AudioClip _emptyclipSound;
 
+    [SerializeField]
+    private Animator _thrusterOdometer;
+
+    [SerializeField]
+    private GameObject _mainCamera;
+
+    private Vector3 _cameramainPosition;
+   
+    [SerializeField]
+    private float _quakeIntensity = 1.0f;
+
+    private bool _isthecameraShaking = false; 
+
+
+   
+
 
 
     //varible to store the audio clip 
@@ -111,6 +130,7 @@ public class Player : MonoBehaviour
             Debug.LogError("The Spawn Manager is NULL.");
         }
 
+        _cameramainPosition = _mainCamera.transform.position;
     }
 
     // Update is called once per frame
@@ -145,11 +165,36 @@ public class Player : MonoBehaviour
         {
             _speed = _speed += _thrusterSpeed;
             _thruster.SetActive(true);
+          
+           
         }
         else if (Input.GetKeyUp(KeyCode.UpArrow))
         {
             _speed = _speed -= _thrusterSpeed;
             _thruster.SetActive(false); 
+            
+           
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            _thrusterOdometer.SetBool("Odometer_Animation", true);
+            OdometerAnimation();
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            _thrusterOdometer.SetBool("Odometer_Animation", true);
+            OdometerAnimation();
+        }
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            _thrusterOdometer.SetBool("Odometer_Animation", false);
+            OdometerAnimation();
+        }
+
+        if (_isthecameraShaking == true)
+        {
+            StartCoroutine(CameraShakingRoutine()); 
         }
 
     }
@@ -311,6 +356,8 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
         }
 
+        _isthecameraShaking = true; 
+
     }
 
     public void tripleshotActive()
@@ -424,6 +471,21 @@ public class Player : MonoBehaviour
 
      
     }
+
+    public void OdometerAnimation()
+    {
+        _uiManager.UpdateAnimation();
+    }
+
+    IEnumerator CameraShakingRoutine()
+    {
+        _mainCamera.transform.position = _cameramainPosition + (Random.insideUnitSphere * _quakeIntensity);
+        yield return new WaitForSeconds(0.25f);
+        _mainCamera.transform.position = _cameramainPosition;
+        _isthecameraShaking = false;
+    }
+
+   
 
     
 }
