@@ -36,6 +36,7 @@ public class Powerup : MonoBehaviour
         // move down at a speed of 3 
         // When we leave the screen, destroy this object 
         transform.Translate(Vector3.down * _powerupSpeed * Time.deltaTime);
+        _powerupSpeed = Random.Range(3.0f, 10f);
 
         if (transform.position.y < -3f)
         {
