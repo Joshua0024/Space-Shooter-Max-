@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -18,6 +19,23 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] powerups;
 
+    private float _spawnTimer = 7f;
+
+    private float _istimerActive = 0f;
+
+    private float _waveTime = 0;
+
+    private float _waveTimer = 20f; 
+
+    [SerializeField]
+    private int _waveNumber = 0;
+
+ 
+
+    
+
+
+
     // Start is called before the first frame update
 
 
@@ -30,8 +48,7 @@ public class SpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
+      
     }
 
     //spawn game objects every 5 seconds 
@@ -48,7 +65,7 @@ public class SpawnManager : MonoBehaviour
 
         yield return new WaitForSeconds(3.0f);
 
-        while (_stopSpawning == false)
+        while (_stopSpawning == false && _waveTime <= _waveTimer)
         {
             spawnPos.x = Random.Range(-8f, 8f);
             spawnPos.y = 7f;
@@ -58,8 +75,10 @@ public class SpawnManager : MonoBehaviour
             newEnemy.transform.parent = _enemyContainer.transform;
 
             yield return new WaitForSeconds(5.0f);
+            _waveTime += Time.deltaTime; 
 
         }
+        ++_waveNumber;
 
 
 
@@ -87,5 +106,4 @@ public class SpawnManager : MonoBehaviour
     {
         _stopSpawning = true;
     }
-
 }
