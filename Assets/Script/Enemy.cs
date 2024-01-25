@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
 
 
     [SerializeField]
-    private float enemySpeed = 4f;
+    private float _enemySpeed = 4f;
 
 
     private Player _player;
@@ -22,6 +22,13 @@ public class Enemy : MonoBehaviour
     private float _fireRate = 3.0f;
     private float _canFire = -1f;
 
+    private float _enemyFrequency = 1.0f;
+    private float _enemyAmplitude = 5.0f;
+    private float _enemycycleSpeed = 1.0f;
+
+    private Vector3 _enemyPos;
+    private Vector3 _enemyAxis;
+
     [SerializeField]
     private GameObject _enemyLaser;
 
@@ -30,6 +37,9 @@ public class Enemy : MonoBehaviour
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _explosionSX = GetComponent<AudioSource>();
+        _enemyPos = transform.position;
+        _enemyAxis = transform.right;
+
         //null check player
         if (_player == null)
         {
@@ -44,6 +54,8 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("The aninator is NULL");
         }
+
+
     }
 
     // Update is called once per frame
@@ -74,10 +86,12 @@ public class Enemy : MonoBehaviour
 
     }
 
+
     void CalculateMovement()
     {
 
-        transform.Translate(Vector3.down * enemySpeed * Time.deltaTime);
+        transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+        _enemySpeed = Random.Range(1.0f, 10f);
 
         if (transform.position.y < -5f)
         {
@@ -86,7 +100,20 @@ public class Enemy : MonoBehaviour
             transform.position = new Vector3(randomX, 7, 0);
         }
 
+        if (transform.position.x < 1)
+        {
+            float randomX = Random.Range(-8f, 8f);
+            _enemyPos += Vector3.down * Time.deltaTime * _enemycycleSpeed;
+            transform.position = _enemyPos + _enemyAxis * Mathf.Sin(Time.time * _enemyFrequency) * _enemyAmplitude;
+            _enemycycleSpeed = Random.Range(1.0f, 10.0f);
+
+
+        }
+
+
     }
+
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -141,4 +168,5 @@ public class Enemy : MonoBehaviour
 
 
     }
+
 }
