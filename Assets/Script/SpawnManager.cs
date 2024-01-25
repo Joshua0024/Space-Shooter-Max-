@@ -29,7 +29,7 @@ public class SpawnManager : MonoBehaviour
     private float _waveTimer = 60f;
  
     [SerializeField]
-    private int _waveNumber = 0;
+    private int _waveNumber = 1;
  
     [SerializeField]
     private TMP_Text _wavecountText;
