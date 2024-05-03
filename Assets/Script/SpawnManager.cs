@@ -13,6 +13,9 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyPrefab;
 
     [SerializeField]
+    private GameObject _enemydosPrefab;
+
+    [SerializeField]
     private GameObject _enemyContainer;
 
     private bool _stopSpawning = false;
@@ -29,11 +32,27 @@ public class SpawnManager : MonoBehaviour
     private float _waveTimer = 60f;
 
     [SerializeField]
-    private int _waveNumber = 1;
+    private int _waveNumber = 0;
 
     [SerializeField]
-    private TextMeshProUGUI _wavecountText;
+    private TMP_Text _wavecountText;
 
+    private float _wavetextTimer = 1.0f;
+
+   
+    public int[] _table =
+    {
+        50, //Triple Shot 
+        45, // Speed 
+        40, // Shield 
+        35, // Ammo 
+        20, //Health
+        15, //Heavy Fire 
+        10, // Fireball 
+    };
+
+    public int _total;
+    public int _randomNumber;
 
 
 
@@ -42,10 +61,33 @@ public class SpawnManager : MonoBehaviour
 
     // Start is called before the first frame update
 
+    private void Start()
+    {
+       foreach(var item in _table)
+        {
+            _total += item;
+        }
+
+        _randomNumber = Random.Range(0, _total); 
+
+       foreach(var weight in _table)
+        {
+            if (_randomNumber<= weight)
+            {
+                Debug.Log("Award:" + weight);
+            }
+            else
+            {
+                _randomNumber -= weight;
+            }
+        }
+    }
+
 
     public void StartSpawning()
     {
         StartCoroutine(SpawnRoutine());
+        StartCoroutine(SpawnRoutineDos());
         StartCoroutine(SpawnPowerupRoutine());
     }
 
@@ -67,23 +109,57 @@ public class SpawnManager : MonoBehaviour
 
         Vector3 spawnPos = Vector3.zero;
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(5.0f);
 
         _waveTime = Time.time + _waveTimer;
 
         while (_stopSpawning == false && Time.time <= _waveTime)
         {
-            spawnPos.x = Random.Range(-8f, 8f);
-            spawnPos.y = 5f;
+            spawnPos.x = Random.Range(8f, -8f);
+            spawnPos.y = 15f;
+                               
 
-            GameObject newEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
+            GameObject newEnemy = Instantiate(_enemydosPrefab, spawnPos, Quaternion.identity);
+
 
             newEnemy.transform.parent = _enemyContainer.transform;
 
             yield return new WaitForSeconds(5.0f);
 
         }
-        _waveNumber++;
+        ++_waveNumber;
+
+        
+
+        Debug.Log("End of Wave");
+        StartCoroutine(WaveBreak());
+    }
+
+    IEnumerator SpawnRoutineDos()
+    {
+        Vector3 spawnPos = Vector3.zero;
+
+        yield return new WaitForSeconds(10.0f);
+
+        _waveTime = Time.time + _waveTimer;
+
+        while (_stopSpawning == false && Time.time <= _waveTime)
+        {
+            spawnPos.x = Random.Range(8f, -8f);
+            spawnPos.y = 15f;
+
+
+            GameObject secondEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
+
+
+            secondEnemy.transform.parent = _enemyContainer.transform;
+
+            yield return new WaitForSeconds(5.0f);
+
+        }
+        ++_waveNumber;
+
+
 
         Debug.Log("End of Wave");
         StartCoroutine(WaveBreak());
@@ -102,11 +178,9 @@ public class SpawnManager : MonoBehaviour
 
 
         }
-        else
-        {
-
-        }
+       
     }
+
 
     IEnumerator SpawnPowerupRoutine()
 
@@ -119,13 +193,26 @@ public class SpawnManager : MonoBehaviour
         {
 
             Vector3 postToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            int randomPowerUp = Random.Range(0, 6);
+            int randomPowerUp = Random.Range(0, 12);
             Instantiate(powerups[randomPowerUp], postToSpawn, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(3, 8));
+            yield return new WaitForSeconds(Random.Range(3, 7
+                ));
 
         }
+
+
+
+
     }
 
+    IEnumerator WaveTextRoutine()
+    {
+        while (_wavecountText == true)
+        {
+            yield return new WaitForSeconds(3.0f);
+            _wavecountText.gameObject.SetActive(false);
+        }
+    }
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
@@ -135,5 +222,9 @@ public class SpawnManager : MonoBehaviour
     {
         _wavecountText.text = "Wave:" + _waveNumber.ToString();
         _wavecountText.gameObject.SetActive(true);
+        StartCoroutine(WaveTextRoutine());
     }
+
+
+
 }

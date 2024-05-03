@@ -30,6 +30,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Animator _thrusterScale;
 
+    public CanvasGroup _whiteScreen;
+
+    private bool _flashBang = false; 
    
 
 
@@ -46,7 +49,20 @@ public class UIManager : MonoBehaviour
       
     }
 
- 
+    void Update()
+    {
+        if(_flashBang)
+        {
+            _whiteScreen.alpha = _whiteScreen.alpha - Time.deltaTime; 
+            if(_whiteScreen.alpha <=0)
+            {
+                _whiteScreen.alpha = 0;
+
+
+                _flashBang = false;
+            }
+        }
+    }
 
     public void UpdateAmmo(int playerAmmo)
     {
@@ -79,14 +95,14 @@ public class UIManager : MonoBehaviour
 
     
         
-            _thrusterScale.SetTrigger("Odometer_Animation");
+            _thrusterScale.SetTrigger("Odometer_Animation 0");
 
             Debug.Log("UpArrow Key was pressed");
         
 
     }
 
-    void GameOver()
+   public void GameOver()
         {
             _gameoverActive.gameObject.SetActive(true);
             StartCoroutine(GameOverBlinkRoutine());
@@ -95,7 +111,7 @@ public class UIManager : MonoBehaviour
         }
 
         IEnumerator GameOverBlinkRoutine()
-        {
+        {  
             while (true)
             {
                 _gameoverActive.text = "GAME OVER";
@@ -105,6 +121,11 @@ public class UIManager : MonoBehaviour
             }
         }
 
+    public void SmartAmmo()
+    {
+        _flashBang = true;
+        _whiteScreen.alpha = 1;
+    }
     
 
 }

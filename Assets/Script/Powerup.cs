@@ -22,11 +22,39 @@ public class Powerup : MonoBehaviour
     private Player _player;
 
     [SerializeField]
+    private GameObject _thePlayer;
+
+    [SerializeField]
     private AudioClip _powerupSX;
+
+
+    [SerializeField]
+    private float _spaceMagnet = 1.0f;
+
+    [SerializeField]
+    private float _magnetRate = 0.5f;
+
+    private float _canMagnet = -1;
+
+   
+    
+  
+
+   
 
     void Start()
     {
+        _thePlayer = GameObject.FindGameObjectWithTag("Player");
+
+        if (_thePlayer == null)
+        {
+            Debug.LogError("Player is null");
+        }
+        
         _player = GameObject.Find("Player").GetComponent<Player>();
+
+        
+
     }
 
 
@@ -36,6 +64,7 @@ public class Powerup : MonoBehaviour
         // move down at a speed of 3 
         // When we leave the screen, destroy this object 
         transform.Translate(Vector3.down * _powerupSpeed * Time.deltaTime);
+        _powerupSpeed = Random.Range(2.0f, 5f);
 
         if (transform.position.y < -3f)
         {
@@ -43,7 +72,13 @@ public class Powerup : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-
+        
+        if (Input.GetKey(KeyCode.C) && Time.time > _canMagnet)  
+        {
+            _canMagnet = Time.time + _magnetRate;
+            TrackerBeam();
+        }
+       
     }
 
     //OnTriggerCollision
@@ -92,6 +127,11 @@ public class Powerup : MonoBehaviour
                         player.AddScore(6);
                         Debug.Log("Heavy Fire Actived");
                         break;
+                    case 6:
+                        player.DangerBall();
+                        player.AddScore(-10);
+                        Debug.Log("Direct Hit");
+                        break;
                     default:
                         Debug.Log("Default Value");
                         break;
@@ -102,5 +142,26 @@ public class Powerup : MonoBehaviour
             AudioSource.PlayClipAtPoint(_powerupSX, transform.position);
             Destroy(this.gameObject);
         }
+        else 
+        {
+            other.gameObject.TryGetComponent<Laser>(out Laser _isEnemyLaser);
+
+            if(_isEnemyLaser != null)
+            {
+                Destroy(this.gameObject);
+            }
+            _player.AddScore(-20);
+
+        }
+
+        
+
     }
+
+    private void TrackerBeam()
+    {
+        transform.position = Vector3.Lerp(this.transform.position, _thePlayer.transform.position, _spaceMagnet * Time.deltaTime);
+    }
+    
+   
 }

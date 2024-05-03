@@ -136,7 +136,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _powerupSpeed: 3
   powerupID: 0
+  _thePlayer: {fileID: 0}
   _powerupSX: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  _spaceMagnet: 1
+  _magnetCooldown: 20
 --- !u!95 &-5853581024187500200
 Animator:
   serializedVersion: 3

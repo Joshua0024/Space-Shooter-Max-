@@ -3,7 +3,9 @@ guid: 97b199442fc538043a971c92a3588e89
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _enemyLaser: {instanceID: 0}
+  - _shieldVisualizer: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

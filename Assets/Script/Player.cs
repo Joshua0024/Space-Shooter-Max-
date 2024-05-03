@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleshotPrefab;
 
-    //variable for isTripleShotActive
+        //variable for isTripleShotActive
 
     [SerializeField]
     private bool _istripleshotActive = false;
@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     private bool _isreloadActive = false;
     private bool _isheavyfireActive = false;
     private bool _isthrusterodometerActive = false;
+    private bool _doesfireballDamage = false; 
 
     //varible reference to the shield visualizer 
 
@@ -96,10 +97,23 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _quakeIntensity = 1.0f;
 
-    private bool _isthecameraShaking = false; 
+    private bool _isthecameraShaking = false;
 
+    private float _powerupcycleSpeed = 1.0f;
 
-   
+    private AudioSource _explosionSX;
+
+    [SerializeField]
+    private GameObject _homingmisslePrefab;
+
+    [SerializeField]
+    private float _missleRate = 15f;
+
+    [SerializeField]
+    private bool _homingActive = false;
+    
+    private float _missleFire = -1f;
+
 
 
 
@@ -156,12 +170,16 @@ public class Player : MonoBehaviour
             FireLaser();
         }
        
-      
+      if (Input.GetKeyDown(KeyCode.H) && Time.time > _missleFire )
+        {
+            _missleFire = Time.time + _missleRate;
+            Instantiate(_homingmisslePrefab, transform.position, Quaternion.identity);
+        }
 
 
 
 
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             _speed = _speed += _thrusterSpeed;
             _thruster.SetActive(true);
@@ -272,6 +290,11 @@ public class Player : MonoBehaviour
 
         //play the laser audio clip 
 
+    }
+
+    public void FireHomingMissle()
+    {
+        _homingActive = true;
     }
 
 
@@ -460,6 +483,8 @@ public class Player : MonoBehaviour
         StartCoroutine(FireRatedownRoutine());
     }
 
+   
+
     IEnumerator FireRatedownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
@@ -485,7 +510,68 @@ public class Player : MonoBehaviour
         _isthecameraShaking = false;
     }
 
-   
+    public void DangerBall()
+    {
+        if (_isshieldActive == true && _shieldStrength >= 1)
+        {
+            _shieldStrength--;
+            _isthecameraShaking = true;
 
-    
-}
+            switch (_shieldStrength)
+            {
+                case 0:
+                    _isshieldActive = false;
+                    _shield.SetActive(false);
+                    break;
+                case 1:
+                    _shieldSpriteRenderer.color = Color.red;
+                    break;
+                case 2:
+                    _shieldSpriteRenderer.color = Color.magenta;
+                    break;
+
+            }
+            _isthecameraShaking = true;
+            return;
+        }
+
+        if (_isshieldActive == true)
+        {
+            _isshieldActive = false;
+            _shield.SetActive(false);
+            return;
+        }
+
+        _lives--;
+        _isthecameraShaking = true;
+
+        _uiManager.UpdateLives(_lives);
+
+        if (_lives == 2)
+        {
+            _rightDamage.SetActive(true);
+           
+
+        }
+        else if (_lives == 1)
+        {
+            _leftDamage.SetActive(true);
+           
+        }
+        
+        if(_lives < 1)
+        {
+            _spawnManager.OnPlayerDeath();
+            Destroy(this.gameObject);
+            _uiManager.GameOver();
+        }
+
+
+        _powerupcycleSpeed = Random.Range(1.0f, 20.0f);
+
+
+    }
+
+
+
+} 

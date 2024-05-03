@@ -47,9 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b199442fc538043a971c92a3588e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpeed: 1.5
+  _enemySpeed: 4
+  _rayCastRad: 0.5
+  _rayDistance: 8
   _enemyLaser: {fileID: 2413091251485661172, guid: b6580ae44036e0947a513ef233d25c93,
     type: 3}
+  _shieldVisualizer: {fileID: 0}
 --- !u!212 &431640580084036930
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -87,7 +90,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -545828577
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3154912113cbb4a498df6f571c74e18c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

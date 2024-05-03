@@ -1,4 +1,4 @@
-﻿ using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,20 +7,27 @@ public class Laser : MonoBehaviour
     // speed variable of 8
     [SerializeField]
     private float _speed = 8f;
+
     public bool _isEnemyLaser = false;
+    private bool _isFlashBang = false;
+
 
 
 
     // Update is called once per frame
     void Update()
     {
-        if (_isEnemyLaser == false)
+        if (_isEnemyLaser == true && _isFlashBang == true)
         {
             MoveUp();
         }
-        else
+        else if (_isEnemyLaser == true && _isFlashBang == false)
         {
             MoveDown();
+        }
+        else
+        {
+            MoveUp();
         }
 
 
@@ -84,6 +91,13 @@ public class Laser : MonoBehaviour
         _isEnemyLaser = true;
     }
 
+    public void BackwardFlashbang()
+    {
+        _isFlashBang = true;
+    }
+
+
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player" && _isEnemyLaser == true)
@@ -99,6 +113,8 @@ public class Laser : MonoBehaviour
 
 
         }
+
+
 
     }
 
